@@ -12,14 +12,14 @@ namespace OrdersSystem.Services
         public Task SendEmailAsync(string emailto, string subject, string htmlMessage)
         {
             var email = new MimeMessage();
-            email.From.Add(new MailboxAddress("nadawca maila", "zibek02@wp.pl"));
+            email.From.Add(new MailboxAddress("nadawca maila", emailto));
             email.To.Add(MailboxAddress.Parse(emailto));
             email.Subject = subject;
             email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = htmlMessage };
 
             using var smtp = new MailKit.Net.Smtp.SmtpClient();
-            smtp.Connect("smtp.wp.pl", 465, SecureSocketOptions.StartTlsWhenAvailable);
-            smtp.Authenticate("zibek02@wp.pl", "ZibekETI1!");
+            smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.Auto);
+            smtp.Authenticate("zibek1212@gmail.com", "Zibus123#");
             smtp.Send(email);
             smtp.Disconnect(true);
 

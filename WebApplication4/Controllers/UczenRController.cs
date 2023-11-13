@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +15,13 @@ namespace WebApplication4.Controllers
     public class UczenRController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public UczenRController(ApplicationDbContext context)
+        public UczenRController(ApplicationDbContext context, 
+            UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: UczenR
@@ -61,6 +66,10 @@ namespace WebApplication4.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = new IdentityUser();
+                user.Email = uczen.UczenUserId;
+                _userManager.CreateAsync(user, "Haslo123!");
+                uczen.UczenUserId = user.Id;
                 _context.Add(uczen);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
