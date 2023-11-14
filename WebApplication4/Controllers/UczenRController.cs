@@ -69,6 +69,7 @@ namespace WebApplication4.Controllers
                 var user = new IdentityUser();
                 user.Email = uczen.UczenUserId;
                 await _userManager.CreateAsync(user, "Haslo123!");
+                _context.Users.Add(user);
                 uczen.UczenUserId = user.Id;
                 _context.Add(uczen);
                 await _context.SaveChangesAsync();
